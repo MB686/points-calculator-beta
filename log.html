@@ -38,6 +38,12 @@
     </table>
     <div id="pointsSummary"></div>
     <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/points-calculator-beta/sw.js')
+                .then(() => console.log('Service Worker Registered in log.html'))
+                .catch(error => console.log('Service Worker Registration Failed in log.html:', error));
+        }
+
         function loadJournal() {
             const log = JSON.parse(localStorage.getItem('pointsLog') || '[]');
             const dailyBudget = parseFloat(localStorage.getItem('dailyBudget') || '36');
@@ -67,7 +73,9 @@
         }
 
         function goHome() {
-            window.location.href = 'index.html';
+            console.log('Navigating to: https://mb686.github.io/points-calculator-beta/index.html');
+            window.location.href = 'https://mb686.github.io/points-calculator-beta/index.html';
+            // Fallback: window.location.href = 'index.html';
         }
 
         window.onload = loadJournal;
