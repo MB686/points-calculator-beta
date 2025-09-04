@@ -18,11 +18,13 @@
         #logTable th, #logTable td { border: 1px solid #ccc; padding: 8px; text-align: left; font-size: 16px; }
         #pointsSummary { margin: 20px auto 0; font-size: 18px; font-weight: bold; width: 75%; text-align: left; }
         #pointsTarget { margin: 10px auto 20px; font-size: 18px; font-weight: bold; width: 75%; text-align: left; }
+        #currentPointsDisplay { margin: 10px auto 5px; font-size: 18px; width: 75%; text-align: left; }
     </style>
 </head>
 <body>
     <h1>Daily Points Journal</h1>
     <div id="pointsTarget"></div>
+    <div id="currentPointsDisplay"></div>
     <label for="food">Food Description:</label>
     <input type="text" id="food" placeholder="Enter food description">
     <button onclick="saveLog()">Save</button>
@@ -47,7 +49,9 @@
         function loadJournal() {
             const log = JSON.parse(localStorage.getItem('pointsLog') || '[]');
             const dailyBudget = parseFloat(localStorage.getItem('dailyBudget') || '36');
+            const currentPoints = parseFloat(localStorage.getItem('currentPoints') || '0');
             document.getElementById('pointsTarget').innerText = `Daily Points Target: ${dailyBudget}`;
+            document.getElementById('currentPointsDisplay').innerText = currentPoints > 0 ? `Food Description: ${currentPoints} Points` : '';
             const logBody = document.getElementById('logBody');
             logBody.innerHTML = '';
             log.forEach(entry => {
