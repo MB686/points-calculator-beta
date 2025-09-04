@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Daily Points Journal</title>
+    <link rel="apple-touch-icon" href="icon.png">
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 400px; margin: 0 auto; padding: 20px; }
+        h1 { width: 75%; margin: 0 auto; text-align: left; }
+        label { display: block; margin: 10px 0 5px; font-size: 18px; width: 75%; text-align: left; }
+        input { width: 75%; padding: 8px; box-sizing: border-box; margin: 0 auto; display: block; font-size: 16px; }
+        button { width: 75%; padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer; margin: 20px auto 0; display: block; font-size: 18px; }
+        button:hover { background-color: #45a049; }
+        #homeButton { margin-top: 10px; }
+        #logTable { width: 75%; margin: 20px auto 0; border-collapse: collapse; }
+        #logTable th, #logTable td { border: 1px solid #ccc; padding: 8px; text-align: left; font-size: 16px; }
+        #pointsSummary { margin: 20px auto 0; font-size: 18px; font-weight: bold; width: 75%; text-align: left; }
+        #pointsTarget { margin: 10px auto 20px; font-size: 18px; font-weight: bold; width: 75%; text-align: left; }
+    </style>
+</head>
+<body>
+    <h1>Daily Points Journal</h1>
+    <div id="pointsTarget"></div>
+    <label for="food">Food Description:</label>
+    <input type="text" id="food" placeholder="Enter food description">
+    <button onclick="saveLog()">Save</button>
+    <button id="homeButton" onclick="goHome()">Home</button>
+    <table id="logTable">
+        <thead>
+            <tr>
+                <th>Food</th>
+                <th>Points</th>
+            </tr>
+        </thead>
+        <tbody id="logBody"></tbody>
+    </table>
+    <div id="pointsSummary"></div>
+    <script>
+        function loadJournal() {
+            const log = JSON.parse(localStorage.getItem('pointsLog') || '[]');
+            const dailyBudget = parseFloat(localStorage.getItem('dailyBudget') || '36');
+            document.getElementById('pointsTarget').innerText = `Daily Points Target: ${dailyBudget}`;
+            const logBody = document.getElementById('logBody');
+            logBody.innerHTML = '';
+            log.forEach(entry => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${entry.food}</td><td>${entry.points}</td>`;
+                logBody.appendChild(row);
+            });
+            const totalPoints = log.reduce((sum, entry) => sum + entry.points, 0);
+            document.getElementById('pointsSummary').innerText = `Points Spent: ${totalPoints} | Points Remaining: ${Math.max(0, dailyBudget - totalPoints)}`;
+        }
+
+        function saveLog() {
+            const food = document.getElementById('food').value.trim();
+            const points = parseFloat(localStorage.getItem('currentPoints') || '0');
+            if (food && points > 0) {
+                const log = JSON.parse(localStorage.getItem('pointsLog') || '[]');
+                log.push({ food, points });
+                localStorage.setItem('pointsLog', JSON.stringify(log));
+                document.getElementById('food').value = '';
+                localStorage.removeItem('currentPoints');
+                loadJournal();
+            }
+        }
+
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+
+        window.onload = loadJournal;
+    </script>
+</body>
+</html>
