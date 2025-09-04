@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Weight Watchers Points Calculator</title>
+    <title>Weight Watchers Points Calculator (Beta)</title>
     <link rel="apple-touch-icon" href="icon.png">
     <style>
         body { font-family: Arial, sans-serif; max-width: 400px; margin: 0 auto; padding: 20px; }
@@ -18,7 +18,7 @@
     </style>
 </head>
 <body>
-    <h1>Weight Watchers Points Calculator</h1>
+    <h1>Weight Watchers Points Calculator (Beta)</h1>
     <label for="calories">Calories:</label>
     <input type="number" id="calories" placeholder="Enter calories">
     <label for="fat">Fat (grams):</label>
@@ -30,7 +30,7 @@
     <div id="result"></div>
     <script>
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/points-calculator/sw.js')
+            navigator.serviceWorker.register('/points-calculator-beta/sw.js')
                 .then(() => console.log('Service Worker Registered in index.html'))
                 .catch(error => console.log('Service Worker Registration Failed in index.html:', error));
         }
