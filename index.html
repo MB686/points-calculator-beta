@@ -11,11 +11,10 @@
         h1 { width: 75%; margin: 0 auto; text-align: left; }
         label { display: block; margin: 10px auto 5px; font-size: 18px; width: 75%; text-align: left; }
         input { width: 75%; padding: 8px; box-sizing: border-box; margin: 0 auto; display: block; font-size: 16px; }
-        button { width: 75%; padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer; margin: 20px auto 0; display: block; font-size: 18px; }
+        .button-container { display: flex; flex-direction: column; gap: 10px; width: 75%; margin: 10px auto 0; }
+        button { width: 100%; padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer; font-size: 18px; }
         button:hover { background-color: #45a049; }
-        #clearButton { margin-top: 10px; }
-        #logButton { margin-top: 10px; display: none; }
-        #goToLogButton { margin-top: 10px; }
+        #logButton { display: none; }
         #result { margin: 20px auto 0; font-size: 18px; font-weight: bold; width: 75%; text-align: left; }
     </style>
 </head>
@@ -27,11 +26,13 @@
     <input type="number" id="fat" placeholder="Enter fat grams">
     <label for="fiber">Fiber (grams):</label>
     <input type="number" id="fiber" placeholder="Enter fiber grams">
-    <button onclick="calculatePoints()">Calculate</button>
-    <button id="clearButton" onclick="clearFields()">Clear</button>
+    <div class="button-container">
+        <button onclick="calculatePoints()">Calculate</button>
+        <button id="clearButton" onclick="clearFields()">Clear</button>
+        <button id="logButton" onclick="logPoints()">Log it</button>
+        <button id="goToLogButton" onclick="goToLog()">Go to Log</button>
+    </div>
     <div id="result"></div>
-    <button id="logButton" onclick="logPoints()">Log it</button>
-    <button id="goToLogButton" onclick="goToLog()">Go to Log</button>
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/points-calculator-beta/sw.js')
