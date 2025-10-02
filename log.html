@@ -9,18 +9,19 @@
     <style>
         body { font-family: Arial, sans-serif; max-width: 400px; margin: 0 auto; padding: 20px; }
         h1 { width: 75%; margin: 0 auto; text-align: left; }
-        h2 { width: 75%; margin: 20px auto 10px; text-align: left; font-size: 20px; }
         label { display: block; margin: 10px auto 5px; font-size: 18px; width: 75%; text-align: left; }
         input { width: 75%; padding: 8px; box-sizing: border-box; margin: 0 auto; display: block; font-size: 16px; }
         button { width: 75%; padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer; margin: 20px auto 0; display: block; font-size: 18px; }
         button:hover { background-color: #45a049; }
+        #setTargetButton { margin-top: 10px; }
+        #saveButton { margin-top: 10px; }
         #homeButton { margin-top: 10px; }
         #resetButton { margin-top: 10px; background-color: #f44336; }
         #resetButton:hover { background-color: #d32f2f; }
-        #logTable, #weightTable { width: 75%; margin: 20px auto 0; border-collapse: collapse; }
-        #logTable th, #logTable td, #weightTable th, #weightTable td { border: 1px solid #ccc; padding: 8px; text-align: left; font-size: 16px; }
-        #logTable button, #weightTable button { width: auto; margin: 0; padding: 5px 10px; font-size: 14px; background-color: #f44336; }
-        #logTable button:hover, #weightTable button:hover { background-color: #d32f2f; }
+        #logTable { width: 75%; margin: 20px auto 0; border-collapse: collapse; }
+        #logTable th, #logTable td { border: 1px solid #ccc; padding: 8px; text-align: left; font-size: 16px; }
+        #logTable button { width: auto; margin: 0; padding: 5px 10px; font-size: 14px; background-color: #f44336; }
+        #logTable button:hover { background-color: #d32f2f; }
         #pointsSummary { margin: 20px auto 0; font-size: 18px; font-weight: bold; width: 75%; text-align: left; }
         #pointsTarget { margin: 10px auto 5px; font-size: 18px; font-weight: bold; width: 75%; text-align: left; }
     </style>
@@ -35,7 +36,8 @@
     <input type="number" id="points" placeholder="Enter points">
     <label for="food">Food Description:</label>
     <input type="text" id="food" placeholder="Enter food description">
-    <button onclick="saveLog()">Save</button>
+    <button id="saveButton" onclick="saveLog()">Save</button>
+    <button id="homeButton" onclick="goHome()">Home</button>
     <table id="logTable">
         <thead>
             <tr>
@@ -47,24 +49,7 @@
         <tbody id="logBody"></tbody>
     </table>
     <div id="pointsSummary"></div>
-    <h2>Weight Tracker</h2>
-    <label for="date">Date:</label>
-    <input type="date" id="date">
-    <label for="weight">Weight (lbs):</label>
-    <input type="number" id="weight" placeholder="Enter weight in lbs">
-    <button onclick="saveWeight()">Save Weight</button>
-    <table id="weightTable">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Weight (lbs)</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody id="weightBody"></tbody>
-    </table>
     <button id="resetButton" onclick="resetAll()">Reset All</button>
-    <button id="homeButton" onclick="goHome()">Home</button>
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/points-calculator-beta/sw.js')
@@ -89,15 +74,13 @@
             document.getElementById('pointsSummary').innerText = `Points Spent: ${totalPoints} | Points Remaining: ${Math.max(0, dailyBudget - totalPoints)}`;
         }
 
-        function loadWeightTracker() {
-            const weightLog = JSON.parse(localStorage.getItem('weightLog') || '[]');
-            const weightBody = document.getElementById('weightBody');
-            weightBody.innerHTML = '';
-            weightLog.forEach((entry, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `<td>${entry.date}</td><td>${entry.weight}</td><td><button onclick="deleteWeight(${index})">Delete</button></td>`;
-                weightBody.appendChild(row);
-            });
+        function setDailyBudget() {
+            const dailyBudget = parseFloat(document.getElementById('dailyBudget').value) || 36;
+            if (dailyBudget > 0) {
+                localStorage.setItem('dailyBudget', dailyBudget);
+                document.getElementById('dailyBudget').value = '';
+                loadJournal();
+            }
         }
 
         function saveLog() {
@@ -114,31 +97,11 @@
             }
         }
 
-        function saveWeight() {
-            const date = document.getElementById('date').value;
-            const weight = parseFloat(document.getElementById('weight').value) || 0;
-            if (date && weight > 0) {
-                const weightLog = JSON.parse(localStorage.getItem('weightLog') || '[]');
-                weightLog.push({ date, weight });
-                localStorage.setItem('weightLog', JSON.stringify(weightLog));
-                document.getElementById('date').value = '';
-                document.getElementById('weight').value = '';
-                loadWeightTracker();
-            }
-        }
-
         function deleteEntry(index) {
             const log = JSON.parse(localStorage.getItem('pointsLog') || '[]');
             log.splice(index, 1);
             localStorage.setItem('pointsLog', JSON.stringify(log));
             loadJournal();
-        }
-
-        function deleteWeight(index) {
-            const weightLog = JSON.parse(localStorage.getItem('weightLog') || '[]');
-            weightLog.splice(index, 1);
-            localStorage.setItem('weightLog', JSON.stringify(weightLog));
-            loadWeightTracker();
         }
 
         function resetAll() {
@@ -151,10 +114,7 @@
             window.location.href = 'https://mb686.github.io/points-calculator-beta/index.html';
         }
 
-        window.onload = function() {
-            loadJournal();
-            loadWeightTracker();
-        };
+        window.onload = loadJournal;
     </script>
 </body>
 </html>
