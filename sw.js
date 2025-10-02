@@ -4,8 +4,7 @@ const urlsToCache = [
     '/points-calculator-beta/index.html',
     '/points-calculator-beta/log.html',
     '/points-calculator-beta/weight.html',
-    '/points-calculator-beta/icon.png',
-    '/points-calculator-beta/styles.css'
+    '/points-calculator-beta/icon.png'
 ];
 
 self.addEventListener('install', event => {
