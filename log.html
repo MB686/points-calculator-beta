@@ -147,6 +147,12 @@
                 const table = document.getElementById('logTable').getElementsByTagName('tbody')[0];
                 const row = table.insertRow();
                 row.innerHTML = `<td>${food}</td><td>${points}</td><td><button onclick="deleteRow(this)">Delete</button></td>`;
+                
+                // Save to localStorage
+                const logs = JSON.parse(localStorage.getItem('foodLogs') || '[]');
+                logs.push({ food, points });
+                localStorage.setItem('foodLogs', JSON.stringify(logs));
+                
                 document.getElementById('logForm').reset();
             } else {
                 alert('Please enter valid points and food description.');
@@ -154,7 +160,24 @@
         }
 
         function deleteRow(btn) {
-            btn.parentElement.parentElement.remove();
+            const row = btn.parentElement.parentElement;
+            const index = row.rowIndex - 1; // Adjust for header row
+            row.remove();
+            
+            // Update localStorage
+            const logs = JSON.parse(localStorage.getItem('foodLogs') || '[]');
+            logs.splice(index, 1);
+            localStorage.setItem('foodLogs', JSON.stringify(logs));
+        }
+
+        function loadLogs() {
+            const logs = JSON.parse(localStorage.getItem('foodLogs') || '[]');
+            const table = document.getElementById('logTable').getElementsByTagName('tbody')[0];
+            table.innerHTML = '';
+            logs.forEach(log => {
+                const row = table.insertRow();
+                row.innerHTML = `<td>${log.food}</td><td>${log.points}</td><td><button onclick="deleteRow(this)">Delete</button></td>`;
+            });
         }
 
         function goHome() {
@@ -166,11 +189,15 @@
             document.getElementById('targetForm').reset();
             document.getElementById('logForm').reset();
             localStorage.removeItem('pointsTarget');
+            localStorage.removeItem('foodLogs');
             displayPointsTarget();
         }
 
-        // Load Points Target on page load
-        window.onload = displayPointsTarget;
+        // Load Points Target and logs on page load
+        window.onload = function() {
+            displayPointsTarget();
+            loadLogs();
+        };
     </script>
 </body>
 </html>
