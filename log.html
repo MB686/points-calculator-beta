@@ -27,16 +27,20 @@
             padding: 8px;
             font-size: 16px;
         }
-        button {
+        button, a.linkBtn {
             padding: 10px;
             font-size: 16px;
+            line-height: 1.5; /* Ensure consistent height */
+            box-sizing: border-box; /* Prevent padding differences */
             cursor: pointer;
             background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
+            text-decoration: none;
+            display: inline-block; /* Ensure <a> behaves like button */
         }
-        button:hover {
+        button:hover, a.linkBtn:hover {
             background-color: #0056b3;
         }
         .button-group {
@@ -66,16 +70,10 @@
         nav a:hover {
             text-decoration: underline;
         }
-        footer a {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px;
+        footer a.linkBtn {
             background-color: #28a745;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
         }
-        footer a:hover {
+        footer a.linkBtn:hover {
             background-color: #218838;
         }
     </style>
@@ -120,7 +118,6 @@
         </div>
     </footer>
     <script>
-        // Placeholder JavaScript (to be replaced with actual functionality)
         function setTarget() {
             const target = document.getElementById('targetInput').value;
             if (target && !isNaN(target)) {
