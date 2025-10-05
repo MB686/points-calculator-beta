@@ -27,27 +27,18 @@
             padding: 8px;
             font-size: 16px;
         }
-        button, a.linkBtn {
+        button {
             padding: 10px;
             font-size: 16px;
             line-height: 1.5;
             box-sizing: border-box;
             cursor: pointer;
-            background-color: #28a745; /* Green for footer buttons */
+            background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
-            text-decoration: none;
-            display: inline-block;
         }
-        button:hover, a.linkBtn:hover {
-            background-color: #218838;
-        }
-        button.resetBtn {
-            background-color: #007bff; /* Blue for Reset All to distinguish it */
-            color: white;
-        }
-        button.resetBtn:hover {
+        button:hover {
             background-color: #0056b3;
         }
         .button-group {
@@ -68,6 +59,17 @@
         th {
             background-color: #f2f2f2;
             font-weight: bold;
+        }
+        nav {
+            margin-top: 20px;
+        }
+        nav a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        nav a:hover {
+            text-decoration: underline;
         }
         footer {
             margin-top: 30px;
@@ -111,11 +113,13 @@
     </table>
     <footer>
         <div class="button-group">
-            <a href="index.html" class="linkBtn">Home</a>
-            <a href="weight.html" class="linkBtn">Weight Tracker</a>
-            <button type="button" class="resetBtn" onclick="resetAll()">Reset All</button>
+            <button type="button" onclick="resetAll()">Reset All</button>
         </div>
     </footer>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="weight.html">Weight Tracker</a>
+    </nav>
     <script>
         function setTarget() {
             const target = document.getElementById('targetInput').value;
@@ -186,17 +190,11 @@
             });
         }
 
-        function goHome() {
-            window.location.href = 'index.html';
-        }
-
         function resetAll() {
             document.getElementById('logTable').getElementsByTagName('tbody')[0].innerHTML = '';
-            document.getElementById('targetForm').reset();
             document.getElementById('logForm').reset();
-            localStorage.removeItem('pointsTarget');
             localStorage.removeItem('foodLogs');
-            displayPointsTarget();
+            displayRemainingPoints();
         }
 
         // Load Points Target, logs, and remaining points on page load
