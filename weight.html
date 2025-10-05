@@ -27,21 +27,19 @@
             padding: 8px;
             font-size: 16px;
         }
-        button, a.linkBtn {
+        button {
             padding: 10px;
             font-size: 16px;
             line-height: 1.5;
             box-sizing: border-box;
             cursor: pointer;
-            background-color: #28a745; /* Green to match footer buttons */
+            background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
-            text-decoration: none;
-            display: inline-block;
         }
-        button:hover, a.linkBtn:hover {
-            background-color: #218838;
+        button:hover {
+            background-color: #0056b3;
         }
         .button-group {
             display: flex;
@@ -62,8 +60,19 @@
             background-color: #f2f2f2;
             font-weight: bold;
         }
+        nav {
+            margin-top: 20px;
+        }
+        nav a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
         footer {
-            margin-top: 30px; /* Match log.html footer spacing */
+            margin-top: 30px;
         }
         #pointsTarget {
             margin-top: 20px;
@@ -94,12 +103,11 @@
         </thead>
         <tbody></tbody>
     </table>
-    <footer>
-        <div class="button-group">
-            <a href="index.html" class="linkBtn">Home</a>
-            <a href="log.html" class="linkBtn">Points Journal</a>
-        </div>
-    </footer>
+    <footer></footer>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="log.html">Points Journal</a>
+    </nav>
     <script>
         function displayPointsTarget() {
             const target = localStorage.getItem('pointsTarget');
