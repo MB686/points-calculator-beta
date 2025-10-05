@@ -2,31 +2,99 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weight Tracker</title>
-    <link rel="apple-touch-icon" href="icon.png">
     <style>
-        body { font-family: Arial, sans-serif; max-width: 400px; margin: 0 auto; padding: 20px; }
-        h1 { width: 75%; margin: 0 auto; text-align: left; }
-        label { display: block; margin: 10px auto 5px; font-size: 18px; width: 75%; text-align: left; }
-        input { width: 75%; padding: 8px; box-sizing: border-box; margin: 0 auto; display: block; font-size: 16px; }
-        button { width: 75%; padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer; margin: 20px auto 0; display: block; font-size: 18px; }
-        button:hover { background-color: #45a049; }
-        #homeButton { margin-top: 10px; }
-        #weightTable { width: 75%; margin: 20px auto 0; border-collapse: collapse; }
-        #weightTable th, #weightTable td { border: 1px solid #ccc; padding: 8px; text-align: left; font-size: 16px; }
-        #weightTable button { width: auto; margin: 0; padding: 5px 10px; font-size: 14px; background-color: #f44336; }
-        #weightTable button:hover { background-color: #d32f2f; }
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="date"], input[type="number"] {
+            padding: 8px;
+            font-size: 16px;
+        }
+        button, a.linkBtn {
+            padding: 10px;
+            font-size: 16px;
+            line-height: 1.5;
+            box-sizing: border-box;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        button:hover, a.linkBtn:hover {
+            background-color: #0056b3;
+        }
+        .button-group {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        nav a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        footer a.linkBtn {
+            background-color: #28a745;
+        }
+        footer a.linkBtn:hover {
+            background-color: #218838;
+        }
+        #pointsTarget {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
     </style>
 </head>
 <body>
     <h1>Weight Tracker</h1>
-    <label for="date">Date:</label>
-    <input type="date" id="date">
-    <label for="weight">Weight (lbs):</label>
-    <input type="number" id="weight" placeholder="Enter weight in lbs">
-    <button onclick="saveWeight()">Save Weight</button>
+    <div id="pointsTarget"></div>
+    <form id="weightForm">
+        <label for="dateInput">Date:</label>
+        <input type="date" id="dateInput" required>
+        <label for="weightInput">Weight (lbs):</label>
+        <input type="number" id="weightInput" min="0" step="0.1" required>
+        <div class="button-group">
+            <button type="button" onclick="saveWeight()">Save Weight</button>
+        </div>
+    </form>
     <table id="weightTable">
         <thead>
             <tr>
@@ -35,53 +103,43 @@
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody id="weightBody"></tbody>
+        <tbody></tbody>
     </table>
-    <button id="homeButton" onclick="goHome()">Home</button>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="log.html">Points Journal</a>
+    </nav>
+    <footer>
+        <div class="button-group">
+            <a href="index.html" class="linkBtn">Home</a>
+        </div>
+    </footer>
     <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/points-calculator-beta/sw.js')
-                .then(() => console.log('Service Worker Registered in weight.html'))
-                .catch(error => console.log('Service Worker Registration Failed in weight.html:', error));
-        }
-
-        function loadWeightTracker() {
-            const weightLog = JSON.parse(localStorage.getItem('weightLog') || '[]');
-            const weightBody = document.getElementById('weightBody');
-            weightBody.innerHTML = '';
-            weightLog.forEach((entry, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `<td>${entry.date}</td><td>${entry.weight}</td><td><button onclick="deleteWeight(${index})">Delete</button></td>`;
-                weightBody.appendChild(row);
-            });
+        function displayPointsTarget() {
+            const target = localStorage.getItem('pointsTarget');
+            const pointsTargetDiv = document.getElementById('pointsTarget');
+            pointsTargetDiv.innerText = target ? `Daily Points Target: ${target}` : 'No Points Target Set';
         }
 
         function saveWeight() {
-            const date = document.getElementById('date').value;
-            const weight = parseFloat(document.getElementById('weight').value) || 0;
-            if (date && weight > 0) {
-                const weightLog = JSON.parse(localStorage.getItem('weightLog') || '[]');
-                weightLog.push({ date, weight });
-                localStorage.setItem('weightLog', JSON.stringify(weightLog));
-                document.getElementById('date').value = '';
-                document.getElementById('weight').value = '';
-                loadWeightTracker();
+            const date = document.getElementById('dateInput').value;
+            const weight = document.getElementById('weightInput').value;
+            if (date && weight && !isNaN(weight) && weight >= 0) {
+                const table = document.getElementById('weightTable').getElementsByTagName('tbody')[0];
+                const row = table.insertRow();
+                row.innerHTML = `<td>${date}</td><td>${weight}</td><td><button onclick="deleteRow(this)">Delete</button></td>`;
+                document.getElementById('weightForm').reset();
+            } else {
+                alert('Please enter a valid date and weight.');
             }
         }
 
-        function deleteWeight(index) {
-            const weightLog = JSON.parse(localStorage.getItem('weightLog') || '[]');
-            weightLog.splice(index, 1);
-            localStorage.setItem('weightLog', JSON.stringify(weightLog));
-            loadWeightTracker();
+        function deleteRow(btn) {
+            btn.parentElement.parentElement.remove();
         }
 
-        function goHome() {
-            console.log('Navigating to: https://mb686.github.io/points-calculator-beta/index.html');
-            window.location.href = 'https://mb686.github.io/points-calculator-beta/index.html';
-        }
-
-        window.onload = loadWeightTracker;
+        // Load Points Target on page load
+        window.onload = displayPointsTarget;
     </script>
 </body>
 </html>
