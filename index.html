@@ -2,6 +2,123 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WW Diary</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="number"] {
+            padding: 8px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .button-group {
+            display: flex;
+            gap: 5px; /* Reduced space between buttons */
+            justify-content: center;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+        nav a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        footer a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        footer a:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <h1>WW Diary</h1>
+    <form id="pointsForm">
+        <label for="caloriesInput">Calories:</label>
+        <input type="number" id="caloriesInput" min="0" required>
+        <label for="fatInput">Fat (grams):</label>
+        <input type="number" id="fatInput" min="0" step="0.1" required>
+        <label for="fiberInput">Fiber (grams):</label>
+        <input type="number" id="fiberInput" min="0" step="0.1" required>
+        <div class="button-group">
+            <button type="button" onclick="calculatePoints()">Calculate</button>
+            <button type="button" onclick="clearForm()">Clear</button>
+        </div>
+    </form>
+    <div id="result"></div>
+    <nav>
+        <a href="log.html">Points Journal</a>
+        <a href="weight.html">Weight Tracker</a>
+    </nav>
+    <footer>
+        <a href="log.html" class="linkBtn">Log it</a>
+    </footer>
+    <script>
+        function calculatePoints() {
+            const calories = parseFloat(document.getElementById('caloriesInput').value);
+            const fat = parseFloat(document.getElementById('fatInput').value);
+            const fiber = parseFloat(document.getElementById('fiberInput').value);
+            
+            if (isNaN(calories) || isNaN(fat) || isNaN(fiber)) {
+                document.getElementById('result').innerText = 'Please enter valid numbers.';
+                return;
+            }
+
+            // Simplified points formula (e.g., Weight Watchers-inspired)
+            const points = Math.round((calories / 50) + (fat / 12) - (Math.min(fiber, 4) / 5));
+            document.getElementById('result').innerText = `Points: ${points >= 0 ? points : 0}`;
+        }
+
+        function clearForm() {
+            document.getElementById('pointsForm').reset();
+            document.getElementById('result').innerText = '';
+        }
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <title>WW Diary</title>
