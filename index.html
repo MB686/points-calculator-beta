@@ -44,7 +44,7 @@
             gap: 5px;
             justify-content: center;
         }
-        #result, #pointsTarget {
+        #result, #pointsTarget, #remainingPoints {
             margin-top: 20px;
             font-size: 18px;
             color: #333;
@@ -74,6 +74,7 @@
 <body>
     <h1>WW Diary</h1>
     <div id="pointsTarget"></div>
+    <div id="remainingPoints"></div>
     <form id="pointsForm">
         <label for="caloriesInput">Calories:</label>
         <input type="number" id="caloriesInput" min="0" required>
@@ -118,9 +119,19 @@
             const target = localStorage.getItem('pointsTarget');
             const pointsTargetDiv = document.getElementById('pointsTarget');
             pointsTargetDiv.innerText = target ? `Daily Points Target: ${target}` : 'No Points Target Set';
+            displayRemainingPoints();
         }
 
-        // Load Points Target on page load
+        function displayRemainingPoints() {
+            const target = parseFloat(localStorage.getItem('pointsTarget') || '0');
+            const logs = JSON.parse(localStorage.getItem('foodLogs') || '[]');
+            const totalPoints = logs.reduce((sum, log) => sum + parseFloat(log.points), 0);
+            const remaining = target - totalPoints;
+            const remainingPointsDiv = document.getElementById('remainingPoints');
+            remainingPointsDiv.innerText = target ? `Remaining Points: ${remaining >= 0 ? remaining.toFixed(1) : 0}` : '';
+        }
+
+        // Load Points Target and remaining points on page load
         window.onload = displayPointsTarget;
     </script>
 </body>
