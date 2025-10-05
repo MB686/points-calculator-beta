@@ -30,15 +30,15 @@
         button, a.linkBtn {
             padding: 10px;
             font-size: 16px;
-            line-height: 1.5; /* Ensure consistent height */
-            box-sizing: border-box; /* Prevent padding differences */
+            line-height: 1.5;
+            box-sizing: border-box;
             cursor: pointer;
             background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
             text-decoration: none;
-            display: inline-block; /* Ensure <a> behaves like button */
+            display: inline-block;
         }
         button:hover, a.linkBtn:hover {
             background-color: #0056b3;
@@ -76,10 +76,16 @@
         footer a.linkBtn:hover {
             background-color: #218838;
         }
+        #pointsTarget {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
     </style>
 </head>
 <body>
     <h1>Daily Points Journal</h1>
+    <div id="pointsTarget"></div>
     <form id="targetForm">
         <label for="targetInput">Daily Points Target:</label>
         <input type="number" id="targetInput" min="0" required>
@@ -120,11 +126,18 @@
     <script>
         function setTarget() {
             const target = document.getElementById('targetInput').value;
-            if (target && !isNaN(target)) {
-                alert('Target set to ' + target + ' points');
+            if (target && !isNaN(target) && target >= 0) {
+                localStorage.setItem('pointsTarget', target);
+                displayPointsTarget();
             } else {
                 alert('Please enter a valid number.');
             }
+        }
+
+        function displayPointsTarget() {
+            const target = localStorage.getItem('pointsTarget');
+            const pointsTargetDiv = document.getElementById('pointsTarget');
+            pointsTargetDiv.innerText = target ? `Daily Points Target: ${target}` : 'No Points Target Set';
         }
 
         function saveLog() {
@@ -152,7 +165,12 @@
             document.getElementById('logTable').getElementsByTagName('tbody')[0].innerHTML = '';
             document.getElementById('targetForm').reset();
             document.getElementById('logForm').reset();
+            localStorage.removeItem('pointsTarget');
+            displayPointsTarget();
         }
+
+        // Load Points Target on page load
+        window.onload = displayPointsTarget;
     </script>
 </body>
 </html>
