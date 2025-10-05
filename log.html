@@ -2,179 +2,160 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Points Journal</title>
-    <link rel="apple-touch-icon" href="icon.png">
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 400px;
+            max-width: 600px;
             margin: 0 auto;
             padding: 20px;
-        }
-        h1 {
-            width: 75%;
-            margin: 0 auto;
             text-align: center;
         }
-        label {
-            display: block;
-            margin: 10px auto 5px;
-            font-size: 18px;
-            width: 75%;
-            text-align: left;
+        h1 {
+            color: #333;
         }
-        input {
-            width: 75%;
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="number"], input[type="text"] {
             padding: 8px;
-            box-sizing: border-box;
-            margin: 0 auto;
-            display: block;
             font-size: 16px;
         }
         button {
-            width: 75%;
             padding: 10px;
-            background-color: #4CAF50;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
             color: white;
             border: none;
-            cursor: pointer;
-            margin: 20px auto 0;
-            display: block;
-            font-size: 18px;
+            border-radius: 5px;
         }
         button:hover {
-            background-color: #45a049;
+            background-color: #0056b3;
         }
-        #pointsTarget {
-            margin: 10px auto 5px;
-            font-size: 18px;
-            font-weight: bold;
-            width: 75%;
-            text-align: center;
-            border: 1px solid #ccc;
+        .button-group {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
             padding: 8px;
-            color: #4CAF50;
-            box-sizing: border-box;
-            font-family: Verdana, sans-serif;
+            text-align: left;
         }
-        .target-section {
-            width: 75%;
-            margin: 0 auto 15px;
-            border: 2px solid #ccc;
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        nav a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        footer a {
+            display: inline-block;
+            margin-top: 20px;
             padding: 10px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
         }
-        .journal-section {
-            width: 75%;
-            margin: 0 auto;
-            border: 2px solid #ccc;
-            padding: 10px;
+        footer a:hover {
+            background-color: #218838;
         }
-        #saveButton { margin-top: 10px; }
-        #homeButton { margin-top: 10px; }
-        #resetButton { margin-top: 10px; background-color: #f44336; }
-        #resetButton:hover { background-color: #d32f2f; }
-        #logTable { width: 100%; margin: 20px auto 0; border-collapse: collapse; }
-        #logTable th, #logTable td { border: 1px solid #ccc; padding: 8px; text-align: left; font-size: 16px; }
-        #logTable button { width: auto; margin: 0; padding: 5px 10px; font-size: 14px; background-color: #f44336; }
-        #logTable button:hover { background-color: #d32f2f; }
-        #pointsSummary { margin: 20px auto 0; font-size: 18px; font-weight: bold; width: 100%; text-align: left; }
     </style>
 </head>
 <body>
     <h1>Daily Points Journal</h1>
-    <div id="pointsTarget"></div>
-    <div class="target-section">
-        <label for="dailyBudget">Daily Points Target:</label>
-        <input type="number" id="dailyBudget" placeholder="Enter daily points target">
-        <button id="setTargetButton" onclick="setDailyBudget()">Set Target</button>
-    </div>
-    <div class="journal-section">
-        <label for="points">Points:</label>
-        <input type="number" id="points" placeholder="Enter points">
-        <label for="food">Food Description:</label>
-        <input type="text" id="food" placeholder="Enter food description">
-        <button id="saveButton" onclick="saveLog()">Save</button>
-        <button id="homeButton" onclick="goHome()">Home</button>
-        <table id="logTable">
-            <thead>
-                <tr>
-                    <th>Food</th>
-                    <th>Points</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="logBody"></tbody>
-        </table>
-        <div id="pointsSummary"></div>
-    </div>
-    <button id="resetButton" onclick="resetAll()">Reset All</button>
+    <form id="targetForm">
+        <label for="targetInput">Daily Points Target:</label>
+        <input type="number" id="targetInput" min="0" required>
+        <div class="button-group">
+            <button type="button" onclick="setTarget()">Set Target</button>
+        </div>
+    </form>
+    <form id="logForm">
+        <label for="pointsInput">Points:</label>
+        <input type="number" id="pointsInput" min="0" step="0.1" required>
+        <label for="foodInput">Food Description:</label>
+        <input type="text" id="foodInput" required>
+        <div class="button-group">
+            <button type="button" onclick="saveLog()">Save</button>
+            <button type="button" onclick="goHome()">Home</button>
+        </div>
+    </form>
+    <table id="logTable">
+        <thead>
+            <tr>
+                <th>Food</th>
+                <th>Points</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="weight.html">Weight Tracker</a>
+    </nav>
+    <footer>
+        <div class="button-group">
+            <a href="index.html" class="linkBtn">Home</a>
+            <button type="button" onclick="resetAll()">Reset All</button>
+        </div>
+    </footer>
     <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/points-calculator-beta/sw.js')
-                .then(() => console.log('Service Worker Registered in log.html'))
-                .catch(error => console.log('Service Worker Registration Failed in log.html:', error));
-        }
-
-        function loadJournal() {
-            const log = JSON.parse(localStorage.getItem('pointsLog') || '[]');
-            const dailyBudget = parseFloat(localStorage.getItem('dailyBudget') || '36');
-            const currentPoints = parseFloat(localStorage.getItem('currentPoints') || '0');
-            document.getElementById('pointsTarget').innerText = `Daily Points Target: ${dailyBudget}`;
-            document.getElementById('points').value = currentPoints > 0 ? currentPoints : '';
-            const logBody = document.getElementById('logBody');
-            logBody.innerHTML = '';
-            log.forEach((entry, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `<td>${entry.food}</td><td>${entry.points}</td><td><button onclick="deleteEntry(${index})">Delete</button></td>`;
-                logBody.appendChild(row);
-            });
-            const totalPoints = log.reduce((sum, entry) => sum + entry.points, 0);
-            document.getElementById('pointsSummary').innerText = `Points Spent: ${totalPoints} | Points Remaining: ${Math.max(0, dailyBudget - totalPoints)}`;
-        }
-
-        function setDailyBudget() {
-            const dailyBudget = parseFloat(document.getElementById('dailyBudget').value) || 36;
-            if (dailyBudget > 0) {
-                localStorage.setItem('dailyBudget', dailyBudget);
-                document.getElementById('dailyBudget').value = '';
-                loadJournal();
+        // Placeholder JavaScript (to be replaced with actual functionality)
+        function setTarget() {
+            const target = document.getElementById('targetInput').value;
+            if (target && !isNaN(target)) {
+                alert('Target set to ' + target + ' points');
+            } else {
+                alert('Please enter a valid number.');
             }
         }
 
         function saveLog() {
-            const food = document.getElementById('food').value.trim();
-            const points = parseFloat(document.getElementById('points').value) || 0;
-            if (food && points > 0) {
-                const log = JSON.parse(localStorage.getItem('pointsLog') || '[]');
-                log.push({ food, points });
-                localStorage.setItem('pointsLog', JSON.stringify(log));
-                document.getElementById('food').value = '';
-                document.getElementById('points').value = '';
-                localStorage.removeItem('currentPoints');
-                loadJournal();
+            const points = document.getElementById('pointsInput').value;
+            const food = document.getElementById('foodInput').value;
+            if (points && food && !isNaN(points)) {
+                const table = document.getElementById('logTable').getElementsByTagName('tbody')[0];
+                const row = table.insertRow();
+                row.innerHTML = `<td>${food}</td><td>${points}</td><td><button onclick="deleteRow(this)">Delete</button></td>`;
+                document.getElementById('logForm').reset();
+            } else {
+                alert('Please enter valid points and food description.');
             }
         }
 
-        function deleteEntry(index) {
-            const log = JSON.parse(localStorage.getItem('pointsLog') || '[]');
-            log.splice(index, 1);
-            localStorage.setItem('pointsLog', JSON.stringify(log));
-            loadJournal();
-        }
-
-        function resetAll() {
-            localStorage.removeItem('pointsLog');
-            loadJournal();
+        function deleteRow(btn) {
+            btn.parentElement.parentElement.remove();
         }
 
         function goHome() {
-            console.log('Navigating to: https://mb686.github.io/points-calculator-beta/index.html');
-            window.location.href = 'https://mb686.github.io/points-calculator-beta/index.html';
+            window.location.href = 'index.html';
         }
 
-        window.onload = loadJournal;
+        function resetAll() {
+            document.getElementById('logTable').getElementsByTagName('tbody')[0].innerHTML = '';
+            document.getElementById('targetForm').reset();
+            document.getElementById('logForm').reset();
+        }
     </script>
 </body>
 </html>
