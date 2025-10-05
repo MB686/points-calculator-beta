@@ -33,7 +33,7 @@
             line-height: 1.5;
             box-sizing: border-box;
             cursor: pointer;
-            background-color: #007bff;
+            background-color: #28a745; /* Green for footer buttons */
             color: white;
             border: none;
             border-radius: 5px;
@@ -41,6 +41,13 @@
             display: inline-block;
         }
         button:hover, a.linkBtn:hover {
+            background-color: #218838;
+        }
+        button.resetBtn {
+            background-color: #007bff; /* Blue for Reset All to distinguish it */
+            color: white;
+        }
+        button.resetBtn:hover {
             background-color: #0056b3;
         }
         .button-group {
@@ -62,27 +69,13 @@
             background-color: #f2f2f2;
             font-weight: bold;
         }
-        nav a {
-            margin: 0 10px;
-            text-decoration: none;
-            color: #007bff;
-        }
-        nav a:hover {
-            text-decoration: underline;
-        }
-        footer a.linkBtn {
-            background-color: #28a745;
-        }
-        footer a.linkBtn:hover {
-            background-color: #218838;
+        footer {
+            margin-top: 30px;
         }
         #pointsTarget, #remainingPoints {
             margin-top: 20px;
             font-size: 18px;
             color: #333;
-        }
-        footer {
-            margin-top: 30px;
         }
     </style>
 </head>
@@ -116,14 +109,11 @@
         </thead>
         <tbody></tbody>
     </table>
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="weight.html">Weight Tracker</a>
-    </nav>
     <footer>
         <div class="button-group">
             <a href="index.html" class="linkBtn">Home</a>
-            <button type="button" onclick="resetAll()">Reset All</button>
+            <a href="weight.html" class="linkBtn">Weight Tracker</a>
+            <button type="button" class="resetBtn" onclick="resetAll()">Reset All</button>
         </div>
     </footer>
     <script>
