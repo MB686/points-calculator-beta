@@ -128,6 +128,12 @@
                 const table = document.getElementById('weightTable').getElementsByTagName('tbody')[0];
                 const row = table.insertRow();
                 row.innerHTML = `<td>${date}</td><td>${weight}</td><td><button onclick="deleteRow(this)">Delete</button></td>`;
+                
+                // Save to localStorage
+                const weights = JSON.parse(localStorage.getItem('weightLogs') || '[]');
+                weights.push({ date, weight });
+                localStorage.setItem('weightLogs', JSON.stringify(weights));
+                
                 document.getElementById('weightForm').reset();
             } else {
                 alert('Please enter a valid date and weight.');
@@ -135,11 +141,31 @@
         }
 
         function deleteRow(btn) {
-            btn.parentElement.parentElement.remove();
+            const row = btn.parentElement.parentElement;
+            const index = row.rowIndex - 1; // Adjust for header row
+            row.remove();
+            
+            // Update localStorage
+            const weights = JSON.parse(localStorage.getItem('weightLogs') || '[]');
+            weights.splice(index, 1);
+            localStorage.setItem('weightLogs', JSON.stringify(weights));
         }
 
-        // Load Points Target on page load
-        window.onload = displayPointsTarget;
+        function loadWeights() {
+            const weights = JSON.parse(localStorage.getItem('weightLogs') || '[]');
+            const table = document.getElementById('weightTable').getElementsByTagName('tbody')[0];
+            table.innerHTML = '';
+            weights.forEach(weight => {
+                const row = table.insertRow();
+                row.innerHTML = `<td>${weight.date}</td><td>${weight.weight}</td><td><button onclick="deleteRow(this)">Delete</button></td>`;
+            });
+        }
+
+        // Load Points Target and weights on page load
+        window.onload = function() {
+            displayPointsTarget();
+            loadWeights();
+        };
     </script>
 </body>
 </html>
