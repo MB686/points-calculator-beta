@@ -6,16 +6,25 @@
     <title>Weight Tracker</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', 'Helvetica', Arial, sans-serif;
             max-width: 600px;
             margin: 0 auto 4rem;
             padding: 1.5rem;
             text-align: center;
             color: #222;
         }
+        header {
+            background-color: #e8f0fe;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
         h1 {
             color: #222;
-            font-size: 1.8rem;
+            font-size: 2rem;
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            margin: 0;
         }
         form {
             display: flex;
@@ -99,7 +108,9 @@
     </style>
 </head>
 <body>
-    <h1>Weight Tracker</h1>
+    <header>
+        <h1>Weight Tracker</h1>
+    </header>
     <div id="pointsTarget"></div>
     <form id="weightForm">
         <label for="dateInput">Date:</label>
